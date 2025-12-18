@@ -14,7 +14,7 @@
     "build": "tsc && npm run bundle",
     "bundle": "esbuild src/mcp-server.ts --bundle --platform=node --format=esm --outfile=dist/mcp-server.js --external:fsevents --external:@anthropic-ai/claude-agent-sdk --external:sharp --external:onnxruntime-node --external:better-sqlite3 --external:@xenova/transformers --external:sqlite-vec",
     "build:mcp-bin": "bun build --compile ./cli/mcp-server --outfile=dist/mcp-server-bin",
-    "postinstall": "npm rebuild better-sqlite3 2>/dev/null || bun run build:mcp-bin 2>/dev/null || true",
+    "postinstall": "(npm rebuild better-sqlite3 2>/dev/null || true) && bun run build:mcp-bin",
     "test": "vitest run",
     "test:watch": "vitest"
   },
