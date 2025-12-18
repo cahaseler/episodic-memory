@@ -12,8 +12,8 @@
   "agents": ["./agents/search-conversations.md"],
   "mcpServers": {
     "episodic-memory": {
-      "command": "${CLAUDE_PLUGIN_ROOT}/dist/mcp-server-bin.exe",
-      "args": [],
+      "command": "bun",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/dist/mcp-server.js"],
       "env": {}
     }
   }
