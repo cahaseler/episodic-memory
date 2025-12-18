@@ -3,7 +3,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync, statSync, utimesSync, ex
 import { join } from 'path';
 import { tmpdir } from 'os';
 import { syncConversations } from '../src/sync.js';
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 import * as sqliteVec from 'sqlite-vec';
 
 describe('sync command', () => {

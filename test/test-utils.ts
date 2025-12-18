@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 
 /**
  * Suppress console output during test execution

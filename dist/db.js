@@ -1,4 +1,4 @@
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 import path from 'path';
 import fs from 'fs';
 import * as sqliteVec from 'sqlite-vec';
@@ -41,7 +41,7 @@ export function initDatabase() {
     // Load sqlite-vec extension
     sqliteVec.load(db);
     // Enable WAL mode for better concurrency
-    db.pragma('journal_mode = WAL');
+    db.exec('PRAGMA journal_mode = WAL');
     // Create exchanges table
     db.exec(`
     CREATE TABLE IF NOT EXISTS exchanges (

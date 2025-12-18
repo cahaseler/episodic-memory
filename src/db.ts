@@ -1,11 +1,11 @@
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 import { ConversationExchange } from './types.js';
 import path from 'path';
 import fs from 'fs';
 import * as sqliteVec from 'sqlite-vec';
 import { getDbPath } from './paths.js';
 
-export function migrateSchema(db: Database.Database): void {
+export function migrateSchema(db: Database): void {
   const columns = db.prepare(`SELECT name FROM pragma_table_info('exchanges')`).all() as Array<{ name: string }>;
   const columnNames = new Set(columns.map(c => c.name));
 
@@ -36,7 +36,7 @@ export function migrateSchema(db: Database.Database): void {
   }
 }
 
-export function initDatabase(): Database.Database {
+export function initDatabase(): Database {
   const dbPath = getDbPath();
 
   // Ensure directory exists
@@ -51,7 +51,7 @@ export function initDatabase(): Database.Database {
   sqliteVec.load(db);
 
   // Enable WAL mode for better concurrency
-  db.pragma('journal_mode = WAL');
+  db.exec('PRAGMA journal_mode = WAL');
 
   // Create exchanges table
   db.exec(`
@@ -130,7 +130,7 @@ export function initDatabase(): Database.Database {
 }
 
 export function insertExchange(
-  db: Database.Database,
+  db: Database,
   exchange: ConversationExchange,
   embedding: number[],
   toolNames?: string[]
@@ -199,12 +199,12 @@ export function insertExchange(
   }
 }
 
-export function getAllExchanges(db: Database.Database): Array<{ id: string; archivePath: string }> {
+export function getAllExchanges(db: Database): Array<{ id: string; archivePath: string }> {
   const stmt = db.prepare(`SELECT id, archive_path as archivePath FROM exchanges`);
   return stmt.all() as Array<{ id: string; archivePath: string }>;
 }
 
-export function getFileLastIndexed(db: Database.Database, archivePath: string): number | null {
+export function getFileLastIndexed(db: Database, archivePath: string): number | null {
   const stmt = db.prepare(`
     SELECT MAX(last_indexed) as lastIndexed
     FROM exchanges
@@ -214,7 +214,7 @@ export function getFileLastIndexed(db: Database.Database, archivePath: string): 
   return row.lastIndexed;
 }
 
-export function deleteExchange(db: Database.Database, id: string): void {
+export function deleteExchange(db: Database, id: string): void {
   // Delete from vector table
   db.prepare(`DELETE FROM vec_exchanges WHERE id = ?`).run(id);
 

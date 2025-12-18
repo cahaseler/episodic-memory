@@ -4,7 +4,7 @@ import { searchConversations } from '../src/search.js';
 import { parseConversationFile } from '../src/parser.js';
 import { createTestDb, getFixturePath } from './test-utils.js';
 import { indexTestFiles } from './test-indexer.js';
-import type Database from 'better-sqlite3';
+import type { Database } from 'bun:sqlite';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
